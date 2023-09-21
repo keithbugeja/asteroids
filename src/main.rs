@@ -820,7 +820,6 @@ impl GameWorld {
         // Draw game over if we're dead
         if self.is_game_over() {
             let text_size = measure_text("Game Over", Some(&self.font), 60, 1.0);    
-            // let text_size = measure_text("Game Over", None, 60, 1.0);    
             draw_text_ex(
                 "Game Over", (screen_width() - text_size.width) / 2.0, screen_height() / 2.0,
                 TextParams {
@@ -834,7 +833,6 @@ impl GameWorld {
         // Draw attract mode text
         if self.is_attract_mode() {
             let text_size = measure_text("Asteroids", Some(&self.font), 90, 1.0);
-            // let text_size = measure_text("Asteroids", None, 90, 1.0);    
             draw_text_ex(
                 "Asteroids", (screen_width() - text_size.width) / 2.0, screen_height() / 2.0,
                 TextParams {
@@ -845,7 +843,6 @@ impl GameWorld {
             );
 
             let text_size = measure_text("Press [SPACE] to Start", Some(&self.font), 40, 1.0);    
-            // let text_size = measure_text("Press [SPACE] to Start", None, 40, 1.0);    
             draw_text_ex(
                 "Press [SPACE] to Start", (screen_width() - text_size.width) / 2.0, screen_height() - 50.0,
                 TextParams {
@@ -973,8 +970,8 @@ async fn main() {
         .await
         .unwrap();
 
+    // Construct game world; use loaded font for text rendering
     let mut game = GameWorld::new(font);
-    // let mut game = GameWorld::new(None);
 
     // Start in attact mode
     game.attract_mode();
