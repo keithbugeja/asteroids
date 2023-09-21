@@ -975,7 +975,7 @@ use std::env;
 
 #[macroquad::main("Asteroids")]
 async fn main() {
-    let font = load_ttf_font("Hyperspace.ttf")
+    let font = load_ttf_font("./Hyperspace.ttf")
         .await
         .unwrap();
 
