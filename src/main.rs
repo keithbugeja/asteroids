@@ -602,6 +602,14 @@ enum GameState {
     GameOver,
 }
 
+enum GameInput {
+    Left,
+    Right,
+    Thruster,
+    Cannon,
+    None
+}
+
 /// Game world object
 /// 
 /// The game world contains all game objects. It is responsible for updating and
@@ -652,7 +660,7 @@ impl GameWorld {
     
     /// Game running in attract mode.
     fn game_attract_mode(&mut self) {
-        if is_key_pressed(KeyCode::Space) {
+        if is_key_pressed(KeyCode::Space) || is_mouse_button_pressed(MouseButton::Left) || touches().len() > 0 {
             self.start();
         }
 
@@ -672,7 +680,7 @@ impl GameWorld {
 
     /// Game running in game over mode.
     fn game_over_mode(&mut self) {
-        if is_key_pressed(KeyCode::Space) {
+        if is_key_pressed(KeyCode::Space) || is_mouse_button_pressed(MouseButton::Left) || touches().len() > 0 {
             self.game_state = GameState::AttractMode;
         }
 
@@ -738,20 +746,57 @@ impl GameWorld {
 
     /// Handle player input.
     fn input(&mut self) {        
+        
         // Steering
-        if is_key_down(KeyCode::Left) {
-            self.ship.steer(-0.1);
+        let mut steering : GameInput = GameInput::None;
+        
+        // Translate inputs into steering
+        if is_mouse_button_down(MouseButton::Left) {
+            let mouse_position = mouse_position();
+            let mouse_direction = (Vec2::new(mouse_position.0, mouse_position.1) - self.ship.position).normalize();
+            let ship_direction = Mat2::from_angle(self.ship.rotation).mul_vec2(Vec2::Y);
+            let angle_difference = ship_direction.angle_between(mouse_direction);
+        
+            if angle_difference > 0.1 {
+                steering = GameInput::Left;
+            } else if angle_difference < -0.1 {
+                steering = GameInput::Right;
+            } 
+        } else if is_key_down(KeyCode::Left) {
+            steering = GameInput::Left;
         } else if is_key_down(KeyCode::Right) {
-            self.ship.steer(0.1);
-        } else {
-            self.ship.steer(0.0);
+            steering = GameInput::Right;
+        }
+            
+        // Steer ship
+        match steering {
+            GameInput::Left => {
+                self.ship.steer(-0.1);
+            },
+            GameInput::Right => {
+                self.ship.steer(0.1);
+            },
+            _ => {
+                self.ship.steer(0.0);
+            }
         }
 
-        // Thrust and acceleration
-        if is_key_down(KeyCode::Up) {
-            self.ship.thrust();
+        // Thrusters
+        let mut thrusters : GameInput = GameInput::None;
 
-            self.particles.append(&mut Particle::spawn_conical(self.ship.get_exhaust_position(), self.ship.rotation, 0.5, 1));
+        // Translate inputs into thrusters
+        if is_mouse_button_down(MouseButton::Right) || is_key_down(KeyCode::Up) {
+            thrusters = GameInput::Thruster;
+        } 
+
+        // Thrust and acceleration
+        match thrusters {
+            GameInput::Thruster => {
+                self.ship.thrust();
+
+                self.particles.append(&mut Particle::spawn_conical(self.ship.get_exhaust_position(), self.ship.rotation, 0.5, 1));
+            },
+            _ => { }
         }
 
         // Shooting
