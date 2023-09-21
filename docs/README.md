@@ -1,2 +1,0 @@
-# asteroids
-Asteroids - The game
