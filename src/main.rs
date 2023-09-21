@@ -1,5 +1,4 @@
 use macroquad::prelude::*;
-// use ::rand::prelude::*;
 
 trait Collidable {
     fn is_colliding(&self, other: &dyn Collidable) -> bool;
@@ -87,7 +86,6 @@ impl Asteroid {
     /// let asteroid = Asteroid::spawn_new(AsteroidSize::Medium, Vec2::new(0., 0.));
     /// ```
     fn spawn_new_at(size: AsteroidSize, position: Vec2) -> Self {
-        // let mut rng = ::rand::thread_rng();
 
         let screen_edge: f32 = std::cmp::min(screen_width() as i32, screen_height() as i32) as f32;
         
@@ -122,7 +120,6 @@ impl Asteroid {
 
         // Generate vertices
         for i in 0..sides as usize {
-            // let radius = diameter / 2.0 * rng.gen_range(0.6..1.0);
             let radius = diameter / 2.0 * rand::gen_range(0.6, 1.0);
             let angle = i as f32 / sides * std::f32::consts::PI * 2.0;
             let x = angle.cos() * radius;
@@ -131,12 +128,9 @@ impl Asteroid {
         }
 
         // Generate random direction and velocity
-        // let direction = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
         let direction = rand::gen_range(0.0, std::f32::consts::PI * 2.0);
         let velocity = Mat2::from_angle(direction).mul_vec2(Vec2::X * speed);
-        // let rotation = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
         let rotation = rand::gen_range(0.0, std::f32::consts::PI * 2.0);
-        // let rotation_speed = angular_velocity * rng.gen_range(-1.0..1.0);
         let rotation_speed = angular_velocity * rand::gen_range(-1.0, 1.0);
 
         Self {
@@ -159,13 +153,7 @@ impl Asteroid {
     /// let asteroid = Asteroid::spawn_new(AsteroidSize::Large);
     /// ```
     fn spawn_new(size: AsteroidSize) -> Self {
-        // let mut rng = ::rand::thread_rng();
-
-        let position = match rand::gen_range(0, 4) { // rng.gen_range(0..4) {
-            // 0 => Vec2::new(0., rng.gen_range(0.0..screen_height())),
-            // 1 => Vec2::new(screen_width(), rng.gen_range(0.0..screen_height())),
-            // 2 => Vec2::new(rng.gen_range(0.0..screen_width()), 0.),
-            // 3 => Vec2::new(rng.gen_range(0.0..screen_width()), screen_height()),
+        let position = match rand::gen_range(0, 4) { 
             0 => Vec2::new(0., rand::gen_range(0.0, screen_height())),
             1 => Vec2::new(screen_width(), rand::gen_range(0.0, screen_height())),
             2 => Vec2::new(rand::gen_range(0.0, screen_width()), 0.),
@@ -534,17 +522,13 @@ impl Particle {
 
     /// Spawn particles in a radial pattern.
     fn spawn_radial(position: Vec2, count: u32) -> Vec<Particle> {
-        // let mut rng = ::rand::thread_rng();
         let mut particles = Vec::new();
 
         for _ in 0..count {
-            // let direction = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
             let direction = rand::gen_range(0.0, std::f32::consts::PI * 2.0);
-            // let speed = rng.gen_range(0.4..1.0);
             let speed = rand::gen_range(0.4, 1.0);
             let velocity = Mat2::from_angle(direction).mul_vec2(Vec2::X * speed);
 
-            // particles.push(Self::spawn_new(position, velocity, rng.gen_range(0.2..1.0), 0.01));
             particles.push(Self::spawn_new(position, velocity, rand::gen_range(0.2, 1.0), 0.01));
         }
 
@@ -553,23 +537,19 @@ impl Particle {
 
     /// Spawn particles in a conical pattern.
     fn spawn_conical(position: Vec2, direction: f32, spread: f32, count: u32) -> Vec<Particle> {
-        // let mut rng = ::rand::thread_rng();
         let mut particles = Vec::new();
     
         for _ in 0..count {
             // Generate a random direction within the specified spread
-            // let spread_angle = rng.gen_range(-spread / 2.0..spread / 2.0);
             let spread_angle = rand::gen_range(-spread / 2.0, spread / 2.0);
             let cone_direction = direction + spread_angle;
     
             // Generate a random speed within a range
-            // let speed = rng.gen_range(0.4..1.0);
             let speed = rand::gen_range(0.4, 1.0);
     
             // Calculate velocity based on the cone direction and speed
             let velocity = Mat2::from_angle(cone_direction).mul_vec2(Vec2::Y * speed);
     
-            // particles.push(Self::spawn_new(position, velocity, rng.gen_range(0.2..1.0), 0.01));
             particles.push(Self::spawn_new(position, velocity, rand::gen_range(0.2, 1.0), 0.01));
         }
     
@@ -582,13 +562,10 @@ impl Particle {
         let mut particles = Vec::new();
 
         for _ in 0..count {
-            // let direction = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
             let direction = rand::gen_range(0.0, std::f32::consts::PI * 2.0);
-            // let speed = rng.gen_range(0.4..1.0);
             let speed = rand::gen_range(0.4, 1.0);
             let velocity = Mat2::from_angle(direction).mul_vec2(Vec2::X * speed);
 
-            // particles.push(Self::spawn_new(position, velocity, rng.gen_range(2.0..5.0), 0.1));
             particles.push(Self::spawn_new(position, velocity, rand::gen_range(2.0, 5.0), 0.1));
         }
 
@@ -637,14 +614,14 @@ struct GameWorld {
     player_lives: u32,
     player_score: u32,
     wave_number: u32,
-    // font: Font,
+    font: Font,
     game_state: GameState,
 }
 
 impl GameWorld {
     /// Create a new instance of the GameWorld object.
-    fn new() -> Self {
-    // fn new(font: Font) -> Self {
+    // fn new() -> Self {
+    fn new(font: Font) -> Self {
         Self {
             ship: Ship::spawn_new(),
             asteroids: Vec::new(),
@@ -653,7 +630,7 @@ impl GameWorld {
             wave_number: 0,
             player_lives: 3,
             player_score: 0,
-            // font,
+            font,
             game_state: GameState::AttractMode,
         }
     }
@@ -719,13 +696,11 @@ impl GameWorld {
     }
 
     /// Start attract mode.
-    fn attract_mode(&mut self) {
-        // let mut rng = thread_rng();
-        
+    fn attract_mode(&mut self) {        
         self.asteroids.clear();
 
         for _ in 0..20 {
-            let size = match rand::gen_range(0, 3) { // rng.gen_range(0..3) {
+            let size = match rand::gen_range(0, 3) {
                 0 => AsteroidSize::Small,
                 1 => AsteroidSize::Medium,
                 2 => AsteroidSize::Large,
@@ -816,7 +791,7 @@ impl GameWorld {
                 &format!("Score: {}", self.player_score), 80.0, 40.0,            
                 TextParams {
                     font_size: 30,
-                    // font: Some(&self.font),
+                    font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -826,7 +801,7 @@ impl GameWorld {
                 &format!("Lives: {}", self.player_lives), 80.0, 80.0,            
                 TextParams {
                     font_size: 30,
-                    // font: Some(&self.font),
+                    font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -836,7 +811,7 @@ impl GameWorld {
                 &format!("Wave: {}", self.wave_number), screen_width() * 0.75, 40.0,
                 TextParams {
                     font_size: 30,
-                    // font: Some(&self.font),
+                    font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -844,13 +819,13 @@ impl GameWorld {
 
         // Draw game over if we're dead
         if self.is_game_over() {
-            // let text_size = measure_text("Game Over", Some(&self.font), 60, 1.0);    
-            let text_size = measure_text("Game Over", None, 60, 1.0);    
+            let text_size = measure_text("Game Over", Some(&self.font), 60, 1.0);    
+            // let text_size = measure_text("Game Over", None, 60, 1.0);    
             draw_text_ex(
                 "Game Over", (screen_width() - text_size.width) / 2.0, screen_height() / 2.0,
                 TextParams {
                     font_size: 60,
-                    // font: Some(&self.font),
+                    font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -858,24 +833,24 @@ impl GameWorld {
 
         // Draw attract mode text
         if self.is_attract_mode() {
-            // let text_size = measure_text("Asteroids", Some(&self.font), 90, 1.0);    
-            let text_size = measure_text("Asteroids", None, 90, 1.0);    
+            let text_size = measure_text("Asteroids", Some(&self.font), 90, 1.0);
+            // let text_size = measure_text("Asteroids", None, 90, 1.0);    
             draw_text_ex(
                 "Asteroids", (screen_width() - text_size.width) / 2.0, screen_height() / 2.0,
                 TextParams {
                     font_size: 90,
-                    // font: Some(&self.font),
+                    font: Some(&self.font),
                     ..Default::default()
                 },
             );
 
-            // let text_size = measure_text("Press [SPACE] to Start", Some(&self.font), 40, 1.0);    
-            let text_size = measure_text("Press [SPACE] to Start", None, 40, 1.0);    
+            let text_size = measure_text("Press [SPACE] to Start", Some(&self.font), 40, 1.0);    
+            // let text_size = measure_text("Press [SPACE] to Start", None, 40, 1.0);    
             draw_text_ex(
                 "Press [SPACE] to Start", (screen_width() - text_size.width) / 2.0, screen_height() - 50.0,
                 TextParams {
                     font_size: 40,
-                    // font: Some(&self.font),
+                    font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -994,13 +969,13 @@ impl GameWorld {
 
 #[macroquad::main("Asteroids")]
 async fn main() {
-    // let font = load_ttf_font("./Hyperspace.ttf")
-    //     .await
-    //     .unwrap();
+    let font = load_ttf_font("./Hyperspace.ttf")
+        .await
+        .unwrap();
 
-    // let mut game = GameWorld::new(font);
-    let mut game = GameWorld::new();
-    
+    let mut game = GameWorld::new(font);
+    // let mut game = GameWorld::new(None);
+
     // Start in attact mode
     game.attract_mode();
 
