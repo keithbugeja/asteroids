@@ -19,6 +19,8 @@ This version of Asteroids is written in Rust and was undertaken as an exercise i
 
 However, despite these minor setbacks, it remains faithful to the core gameplay that made Asteroids legendary.
 
+**Note:** The game uses the Hyperspace font. **Hyperspace © (Neale Davidson). 2012-2015. All Rights Reserved.**
+
 ## Ready to Embark?
 
 Here's a quick guide on how to navigate through the cosmic challenges:
