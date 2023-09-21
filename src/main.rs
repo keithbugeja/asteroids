@@ -785,7 +785,7 @@ impl GameWorld {
         let mut thrusters : GameInput = GameInput::None;
 
         // Translate inputs into thrusters
-        if is_mouse_button_down(MouseButton::Right) || is_key_down(KeyCode::Up) {
+        if is_mouse_button_down(MouseButton::Right) || is_key_down(KeyCode::Up) || touches().len() == 2 {
             thrusters = GameInput::Thruster;
         } 
 
