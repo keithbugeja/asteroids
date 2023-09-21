@@ -650,7 +650,7 @@ impl GameWorld {
         }
     }
     
-    /// Check running in attract mode.
+    /// Game running in attract mode.
     fn game_attract_mode(&mut self) {
         if is_key_pressed(KeyCode::Space) {
             self.start();
@@ -909,6 +909,7 @@ impl GameWorld {
                     self.particles.append(&mut Particle::spawn_radial(self.ship.position, 100));
                     self.particles.append(&mut Particle::spawn_debris(self.ship.position, 50));
 
+                    // Lose a life or game over if no more left
                     if self.player_lives == 0 {
                         self.game_state = GameState::GameOver;
                     } else {
@@ -951,8 +952,6 @@ impl GameWorld {
                         // Destroy asteroid and bullet
                         asteroid.destroy();
                         bullet.destroy();
-
-                        
                     }
                 }
             }
