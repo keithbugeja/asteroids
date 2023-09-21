@@ -1,5 +1,5 @@
 use macroquad::prelude::*;
-use ::rand::prelude::*;
+// use ::rand::prelude::*;
 
 trait Collidable {
     fn is_colliding(&self, other: &dyn Collidable) -> bool;
@@ -87,7 +87,7 @@ impl Asteroid {
     /// let asteroid = Asteroid::spawn_new(AsteroidSize::Medium, Vec2::new(0., 0.));
     /// ```
     fn spawn_new_at(size: AsteroidSize, position: Vec2) -> Self {
-        let mut rng = ::rand::thread_rng();
+        // let mut rng = ::rand::thread_rng();
 
         let screen_edge: f32 = std::cmp::min(screen_width() as i32, screen_height() as i32) as f32;
         
@@ -122,7 +122,8 @@ impl Asteroid {
 
         // Generate vertices
         for i in 0..sides as usize {
-            let radius = diameter / 2.0 * rng.gen_range(0.6..1.0);
+            // let radius = diameter / 2.0 * rng.gen_range(0.6..1.0);
+            let radius = diameter / 2.0 * rand::gen_range(0.6, 1.0);
             let angle = i as f32 / sides * std::f32::consts::PI * 2.0;
             let x = angle.cos() * radius;
             let y = angle.sin() * radius;
@@ -130,10 +131,13 @@ impl Asteroid {
         }
 
         // Generate random direction and velocity
-        let direction = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
+        // let direction = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
+        let direction = rand::gen_range(0.0, std::f32::consts::PI * 2.0);
         let velocity = Mat2::from_angle(direction).mul_vec2(Vec2::X * speed);
-        let rotation = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
-        let rotation_speed = angular_velocity * rng.gen_range(-1.0..1.0);
+        // let rotation = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
+        let rotation = rand::gen_range(0.0, std::f32::consts::PI * 2.0);
+        // let rotation_speed = angular_velocity * rng.gen_range(-1.0..1.0);
+        let rotation_speed = angular_velocity * rand::gen_range(-1.0, 1.0);
 
         Self {
             size,
@@ -155,13 +159,17 @@ impl Asteroid {
     /// let asteroid = Asteroid::spawn_new(AsteroidSize::Large);
     /// ```
     fn spawn_new(size: AsteroidSize) -> Self {
-        let mut rng = ::rand::thread_rng();
+        // let mut rng = ::rand::thread_rng();
 
-        let position = match rng.gen_range(0..4) {
-            0 => Vec2::new(0., rng.gen_range(0.0..screen_height())),
-            1 => Vec2::new(screen_width(), rng.gen_range(0.0..screen_height())),
-            2 => Vec2::new(rng.gen_range(0.0..screen_width()), 0.),
-            3 => Vec2::new(rng.gen_range(0.0..screen_width()), screen_height()),
+        let position = match rand::gen_range(0, 4) { // rng.gen_range(0..4) {
+            // 0 => Vec2::new(0., rng.gen_range(0.0..screen_height())),
+            // 1 => Vec2::new(screen_width(), rng.gen_range(0.0..screen_height())),
+            // 2 => Vec2::new(rng.gen_range(0.0..screen_width()), 0.),
+            // 3 => Vec2::new(rng.gen_range(0.0..screen_width()), screen_height()),
+            0 => Vec2::new(0., rand::gen_range(0.0, screen_height())),
+            1 => Vec2::new(screen_width(), rand::gen_range(0.0, screen_height())),
+            2 => Vec2::new(rand::gen_range(0.0, screen_width()), 0.),
+            3 => Vec2::new(rand::gen_range(0.0, screen_width()), screen_height()),
             _ => Vec2::new(0., 0.),
         };
 
@@ -526,15 +534,18 @@ impl Particle {
 
     /// Spawn particles in a radial pattern.
     fn spawn_radial(position: Vec2, count: u32) -> Vec<Particle> {
-        let mut rng = ::rand::thread_rng();
+        // let mut rng = ::rand::thread_rng();
         let mut particles = Vec::new();
 
         for _ in 0..count {
-            let direction = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
-            let speed = rng.gen_range(0.4..1.0);
+            // let direction = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
+            let direction = rand::gen_range(0.0, std::f32::consts::PI * 2.0);
+            // let speed = rng.gen_range(0.4..1.0);
+            let speed = rand::gen_range(0.4, 1.0);
             let velocity = Mat2::from_angle(direction).mul_vec2(Vec2::X * speed);
 
-            particles.push(Self::spawn_new(position, velocity, rng.gen_range(0.2..1.0), 0.01));
+            // particles.push(Self::spawn_new(position, velocity, rng.gen_range(0.2..1.0), 0.01));
+            particles.push(Self::spawn_new(position, velocity, rand::gen_range(0.2, 1.0), 0.01));
         }
 
         particles
@@ -542,21 +553,24 @@ impl Particle {
 
     /// Spawn particles in a conical pattern.
     fn spawn_conical(position: Vec2, direction: f32, spread: f32, count: u32) -> Vec<Particle> {
-        let mut rng = ::rand::thread_rng();
+        // let mut rng = ::rand::thread_rng();
         let mut particles = Vec::new();
     
         for _ in 0..count {
             // Generate a random direction within the specified spread
-            let spread_angle = rng.gen_range(-spread / 2.0..spread / 2.0);
+            // let spread_angle = rng.gen_range(-spread / 2.0..spread / 2.0);
+            let spread_angle = rand::gen_range(-spread / 2.0, spread / 2.0);
             let cone_direction = direction + spread_angle;
     
             // Generate a random speed within a range
-            let speed = rng.gen_range(0.4..1.0);
+            // let speed = rng.gen_range(0.4..1.0);
+            let speed = rand::gen_range(0.4, 1.0);
     
             // Calculate velocity based on the cone direction and speed
             let velocity = Mat2::from_angle(cone_direction).mul_vec2(Vec2::Y * speed);
     
-            particles.push(Self::spawn_new(position, velocity, rng.gen_range(0.2..1.0), 0.01));
+            // particles.push(Self::spawn_new(position, velocity, rng.gen_range(0.2..1.0), 0.01));
+            particles.push(Self::spawn_new(position, velocity, rand::gen_range(0.2, 1.0), 0.01));
         }
     
         particles
@@ -564,15 +578,18 @@ impl Particle {
     
     /// Spawn larger particles with a quicker expiration in a radial pattern.
     fn spawn_debris(position: Vec2, count: u32) -> Vec<Particle> {
-        let mut rng = ::rand::thread_rng();
+        // let mut rng = ::rand::thread_rng();
         let mut particles = Vec::new();
 
         for _ in 0..count {
-            let direction = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
-            let speed = rng.gen_range(0.4..1.0);
+            // let direction = rng.gen_range(0.0..std::f32::consts::PI * 2.0);
+            let direction = rand::gen_range(0.0, std::f32::consts::PI * 2.0);
+            // let speed = rng.gen_range(0.4..1.0);
+            let speed = rand::gen_range(0.4, 1.0);
             let velocity = Mat2::from_angle(direction).mul_vec2(Vec2::X * speed);
 
-            particles.push(Self::spawn_new(position, velocity, rng.gen_range(2.0..5.0), 0.1));
+            // particles.push(Self::spawn_new(position, velocity, rng.gen_range(2.0..5.0), 0.1));
+            particles.push(Self::spawn_new(position, velocity, rand::gen_range(2.0, 5.0), 0.1));
         }
 
         particles
@@ -703,12 +720,12 @@ impl GameWorld {
 
     /// Start attract mode.
     fn attract_mode(&mut self) {
-        let mut rng = thread_rng();
+        // let mut rng = thread_rng();
         
         self.asteroids.clear();
 
         for _ in 0..20 {
-            let size = match rng.gen_range(0..3) {
+            let size = match rand::gen_range(0, 3) { // rng.gen_range(0..3) {
                 0 => AsteroidSize::Small,
                 1 => AsteroidSize::Medium,
                 2 => AsteroidSize::Large,
@@ -974,8 +991,6 @@ impl GameWorld {
     }
 
 }
-
-use std::env;
 
 #[macroquad::main("Asteroids")]
 async fn main() {
