@@ -620,13 +620,14 @@ struct GameWorld {
     player_lives: u32,
     player_score: u32,
     wave_number: u32,
-    font: Font,
+    // font: Font,
     game_state: GameState,
 }
 
 impl GameWorld {
     /// Create a new instance of the GameWorld object.
-    fn new(font: Font) -> Self {
+    fn new() -> Self {
+    // fn new(font: Font) -> Self {
         Self {
             ship: Ship::spawn_new(),
             asteroids: Vec::new(),
@@ -635,7 +636,7 @@ impl GameWorld {
             wave_number: 0,
             player_lives: 3,
             player_score: 0,
-            font,
+            // font,
             game_state: GameState::AttractMode,
         }
     }
@@ -798,7 +799,7 @@ impl GameWorld {
                 &format!("Score: {}", self.player_score), 80.0, 40.0,            
                 TextParams {
                     font_size: 30,
-                    font: Some(&self.font),
+                    // font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -808,7 +809,7 @@ impl GameWorld {
                 &format!("Lives: {}", self.player_lives), 80.0, 80.0,            
                 TextParams {
                     font_size: 30,
-                    font: Some(&self.font),
+                    // font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -818,7 +819,7 @@ impl GameWorld {
                 &format!("Wave: {}", self.wave_number), screen_width() * 0.75, 40.0,
                 TextParams {
                     font_size: 30,
-                    font: Some(&self.font),
+                    // font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -826,12 +827,13 @@ impl GameWorld {
 
         // Draw game over if we're dead
         if self.is_game_over() {
-            let text_size = measure_text("Game Over", Some(&self.font), 60, 1.0);    
+            // let text_size = measure_text("Game Over", Some(&self.font), 60, 1.0);    
+            let text_size = measure_text("Game Over", None, 60, 1.0);    
             draw_text_ex(
                 "Game Over", (screen_width() - text_size.width) / 2.0, screen_height() / 2.0,
                 TextParams {
                     font_size: 60,
-                    font: Some(&self.font),
+                    // font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -839,22 +841,24 @@ impl GameWorld {
 
         // Draw attract mode text
         if self.is_attract_mode() {
-            let text_size = measure_text("Asteroids", Some(&self.font), 90, 1.0);    
+            // let text_size = measure_text("Asteroids", Some(&self.font), 90, 1.0);    
+            let text_size = measure_text("Asteroids", None, 90, 1.0);    
             draw_text_ex(
                 "Asteroids", (screen_width() - text_size.width) / 2.0, screen_height() / 2.0,
                 TextParams {
                     font_size: 90,
-                    font: Some(&self.font),
+                    // font: Some(&self.font),
                     ..Default::default()
                 },
             );
 
-            let text_size = measure_text("Press [SPACE] to Start", Some(&self.font), 40, 1.0);    
+            // let text_size = measure_text("Press [SPACE] to Start", Some(&self.font), 40, 1.0);    
+            let text_size = measure_text("Press [SPACE] to Start", None, 40, 1.0);    
             draw_text_ex(
                 "Press [SPACE] to Start", (screen_width() - text_size.width) / 2.0, screen_height() - 50.0,
                 TextParams {
                     font_size: 40,
-                    font: Some(&self.font),
+                    // font: Some(&self.font),
                     ..Default::default()
                 },
             );
@@ -975,11 +979,12 @@ use std::env;
 
 #[macroquad::main("Asteroids")]
 async fn main() {
-    let font = load_ttf_font("./Hyperspace.ttf")
-        .await
-        .unwrap();
+    // let font = load_ttf_font("./Hyperspace.ttf")
+    //     .await
+    //     .unwrap();
 
-    let mut game = GameWorld::new(font);
+    // let mut game = GameWorld::new(font);
+    let mut game = GameWorld::new();
     
     // Start in attact mode
     game.attract_mode();
