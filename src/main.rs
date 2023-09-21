@@ -304,10 +304,10 @@ impl Ship {
             respawn_lifespan: 0.0,
             shield_lifespan: 0.0,
             vertices: vec![
-                Vec2::new(0., -screen_edge / 40.0),
-                Vec2::new(screen_edge / 80.0, screen_edge / 80.0),
-                Vec2::new(0., screen_edge / 160.0),
-                Vec2::new(-screen_edge / 80.0, screen_edge / 80.0),
+                Vec2::new(0., -screen_edge / 30.0),
+                Vec2::new(screen_edge / 60.0, screen_edge / 60.0),
+                Vec2::new(0., screen_edge / 100.0),
+                Vec2::new(-screen_edge / 60.0, screen_edge / 60.0),
             ],
         }
     }
@@ -333,6 +333,10 @@ impl Ship {
 
     fn is_shield_active(&self) -> bool {
         get_time() < self.shield_lifespan
+    }
+
+    fn get_exhaust_position(&self) -> Vec2 {
+        self.position + Mat2::from_angle(self.rotation).mul_vec2(self.vertices[2])
     }
 
     // Accelerate ship in direction of rotation
@@ -754,7 +758,7 @@ impl GameWorld {
         if is_key_down(KeyCode::Up) {
             self.ship.thrust();
 
-            self.particles.append(&mut Particle::spawn_conical(self.ship.position, self.ship.rotation, 0.5, 1));
+            self.particles.append(&mut Particle::spawn_conical(self.ship.get_exhaust_position(), self.ship.rotation, 0.5, 1));
         }
 
         // Shooting
@@ -967,9 +971,11 @@ impl GameWorld {
 
 }
 
+use std::env;
+
 #[macroquad::main("Asteroids")]
 async fn main() {
-    let font = load_ttf_font("E:/development/rust/asteroids/target/debug/examples/Hyperspace.ttf")
+    let font = load_ttf_font("Hyperspace.ttf")
         .await
         .unwrap();
 
