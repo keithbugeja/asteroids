@@ -928,6 +928,7 @@ struct GameWorld {
     wave_number: u32,
     wave_spawn_time: f64,
     font: Font,
+    touch: bool,
     game_state: GameState,
 }
 
@@ -947,6 +948,7 @@ impl GameWorld {
             wave_number: 0,
             wave_spawn_time: 0.0,
             font,
+            touch: false,
             game_state: GameState::AttractMode,
         }
     }
@@ -969,7 +971,7 @@ impl GameWorld {
     /// Game running in attract mode.
     fn game_attract_mode(&mut self) {
         if is_key_pressed(KeyCode::Space) || is_mouse_button_pressed(MouseButton::Left) || touches().len() > 0 {
-            self.start();
+            self.start(touches().len() > 0);
         }
 
         self.update();
@@ -1033,7 +1035,7 @@ impl GameWorld {
     }
 
     /// Start a new game.
-    fn start(&mut self) {
+    fn start(&mut self, touch: bool) {
         self.player_lives = 3;
         self.player_score = 0;
         self.ship.reset();
@@ -1041,6 +1043,8 @@ impl GameWorld {
         self.wave_number = 0;
         self.next_wave();
 
+        // Used to enable autofire during gameplay
+        self.touch = touch;
         self.game_state = GameState::Playing;
     }
 
@@ -1113,7 +1117,7 @@ impl GameWorld {
             _ => { }
         }
 
-        if is_key_down(KeyCode::Down) {
+        if is_key_down(KeyCode::Down) || touches().len() == 3 {
             if let Some(position) = self.ship.hyperspace() {
                 self.particles.append(&mut Particle::spawn_ring(position, self.ship.radius * 6.0, 200));
                 self.particles.append(&mut Particle::spawn_ring(self.ship.position, self.ship.radius * 6.0, 200));
@@ -1121,7 +1125,7 @@ impl GameWorld {
         }
 
         // Shooting
-        if is_key_pressed(KeyCode::Space) {
+        if is_key_pressed(KeyCode::Space) || self.touch {
             if let Some(bullet) = self.ship.shoot() {
                 self.player_bullets.push(bullet);
             }
