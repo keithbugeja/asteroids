@@ -371,12 +371,12 @@ impl Saucer {
                 match self.size {
                     SaucerSize::Small => {
                         let velocity = (position - self.position).normalize() * 2.0;
-                        return Some(Bullet::spawn_new(self.position, velocity, 2.0, BulletType::Enemy))
+                        return Some(Bullet::spawn_new(self.position, velocity, 100.0, BulletType::Enemy))
                     },
                     SaucerSize::Large => {
                         let direction = rand::gen_range(0.0, 2.0 * std::f32::consts::PI);
                         let velocity = Mat2::from_angle(direction).mul_vec2(Vec2::X * 2.0);
-                        return Some(Bullet::spawn_new(self.position, velocity, 2.0, BulletType::Enemy))
+                        return Some(Bullet::spawn_new(self.position, velocity, 100.0, BulletType::Enemy))
                     },
                 };
             }
