@@ -11,18 +11,18 @@ From Wikipedia:
 
 ## Features
 
-Asteroids is a classic arcade game, updated with modern enhancements and developed in Rust. This project serves as an exercise in deploying Rust code to the web through WebAssembly. Here's what you can anticipate in this web-based version:
+Asteroids is a classic arcade game, updated with modern enhancements and developed in Rust. This project serves as an exercise in deploying Rust code to the web through WebAssembly. Here's what you can anticipate in this version:
 
 - **Classic Gameplay**: Enjoy the timeless gameplay of the original Asteroids arcade game.
-- **Retro-Inspired Graphics**: Experience the nostalgia of classic arcade visuals with a modern twist.
+- **Retro-Inspired Graphics**: Experience the nostalgia of classic arcade visuals with a modern twist such as procedurally generated asteroids and particle effects.
 - **Keyboard, Mouse and Touch Controls**: Control your spaceship with ease using keyboard inputs, mouse or touch controls. 
 - **WebAssembly (Wasm) Compatibility**: Play directly in your web browser.
 
 While paying homage to the original classic there's are a few features I'm still fine-tuning:
 
 - **Silent Cosmos:** Currently, the game is without sound effects or music, allowing you to focus on the raw gameplay experience.
-- ~**Saucers on Standby:** The elusive enemy saucers are yet to make their appearance, but beware; they might sneak up on you in future updates!~
-- ~**No Hyperspace Shortcut:** Unfortunately, the hyperspace escape is temporarily disabled. You'll have to rely on your piloting skills to navigate the asteroid field.~
+- ~**Saucers on Standby:** The elusive enemy saucers are yet to make their appearance, but beware; they might sneak up on you in future updates!~ (now added)
+- ~**No Hyperspace Shortcut:** Unfortunately, the hyperspace escape is temporarily disabled. You'll have to rely on your piloting skills to navigate the asteroid field.~ (now added)
 
 However, despite these minor setbacks, it remains faithful to the core gameplay that made Asteroids legendary.
 
